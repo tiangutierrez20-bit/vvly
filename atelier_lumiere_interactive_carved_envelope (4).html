@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier Lumière — Carved Paper-Cut Envelope & Bespoke Invitation</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Cormorant Garamond, Cinzel, Pinyon Script, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Exclusive Midnight & Silver Luxury Palette */
+    :root {
+      --bg-gradient-1: #070B14;
+      --bg-gradient-2: #0F172A;
+      --env-base: #162038;
+      --env-shade: #0F172A;
+      --env-dark: #090E1A;
+      --env-border: #CBD5E1;
+      --foil-primary: #CBD5E1;
+      --foil-light: #F8FAFC;
+      --foil-dark: #64748B;
+      --wax-color: #94A3B8;
+      --wax-highlight: #E2E8F0;
+      --wax-shadow: #334155;
+      --card-bg: #F8FAFC;
+      --card-text: #0F172A;
+      --card-accent: #334155;
+      --particle-color: rgba(203, 213, 225, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 50% 30%, var(--bg-gradient-2) 0%, var(--bg-gradient-1) 100%);
+      color: #F1F5F9;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .font-serif-display {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-serif-editorial {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .font-script {
+      font-family: 'Pinyon Script', cursive;
+    }
+
+    /* Subtle Paper Grain Overlay */
+    .paper-grain {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0),
+                        radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 0);
+      background-size: 16px 16px;
+      background-position: 0 0, 8px 8px;
+    }
+
+    /* Embossed & Carved Paper Effects */
+    .carved-relief {
+      filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.35))
+              drop-shadow(0px -1px 1px rgba(255, 255, 255, 0.25));
+    }
+
+    .foil-shimmer {
+      background: linear-gradient(
+        135deg,
+        var(--foil-dark) 0%,
+        var(--foil-primary) 25%,
+        var(--foil-light) 50%,
+        var(--foil-primary) 75%,
+        var(--foil-dark) 100%
+      );
+      background-size: 200% 200%;
+      animation: shimmerMove 6s ease infinite;
+    }
+
+    @keyframes shimmerMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 3D Perspective Stage */
+    .stage-perspective {
+      perspective: 1800px;
+      transform-style: preserve-3d;
+    }
+
+    .envelope-assembly {
+      position: relative;
+      width: min(92vw, 540px);
+      aspect-ratio: 1.48 / 1;
+      transform-style: preserve-3d;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+    }
+
+    .envelope-assembly.is-open {
+      transform: translateY(clamp(125px, 24vw, 175px)) scale(0.96);
+      cursor: default;
+    }
+
+    /* Back panel of envelope */
+    .envelope-back {
+      position: absolute;
+      inset: 0;
+      background-color: var(--env-dark);
+      border-radius: 12px;
+      box-shadow:
+        0 30px 65px -12px rgba(0, 0, 0, 0.78),
+        0 12px 24px -8px rgba(0, 0, 0, 0.55),
+        inset 0 0 35px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+
+    /* Inner decorative lining visible when opened */
+    .envelope-liner {
+      position: absolute;
+      inset: 6px;
+      border-radius: 8px;
+      background: radial-gradient(circle at 50% 30%, var(--env-base), var(--env-shade));
+      opacity: 0.95;
+      overflow: hidden;
+    }
+
+    /* Sliding Invitation Card */
+    .invitation-card {
+      position: absolute;
+      left: 4.5%;
+      right: 4.5%;
+      bottom: 6%;
+      height: 88%;
+      background-color: var(--card-bg);
+      color: var(--card-text);
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      transform: translateY(0) translateZ(1px);
+      transition:
+        transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s,
+        box-shadow 1.1s ease 0.35s,
+        height 0.9s ease 0.35s;
+      z-index: 15;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .envelope-assembly.is-open .invitation-card {
+      transform: translateY(-64%) translateZ(24px) scale(1.03);
+      height: clamp(330px, 68vw, 495px);
+      box-shadow:
+        0 28px 60px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(203, 213, 225, 0.55);
+      z-index: 35;
+      cursor: auto;
+    }
+
+    @media (max-width: 480px) {
+      .envelope-assembly.is-open .invitation-card {
+        left: 2.5%;
+        right: 2.5%;
+        transform: translateY(-62%) translateZ(24px) scale(1.02);
+        height: 365px;
+      }
+    }
+
+    /* Custom subtle scrollbar for longer love letter */
+    .letter-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .letter-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .letter-scroll::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.35);
+      border-radius: 9999px;
+    }
+
+    /* Carved Memory Photo Frames Reveal */
+    .memories-gallery {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(24px);
+      overflow: hidden;
+      pointer-events: none;
+      transition:
+        max-height 1s cubic-bezier(0.22, 1, 0.36, 1) 0.45s,
+        opacity 0.85s ease 0.55s,
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.55s,
+        margin 0.85s ease 0.45s;
+    }
+
+    .memories-gallery.is-visible {
+      max-height: 1500px;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      margin-top: clamp(9.5rem, 22vw, 12.5rem);
+    }
+
+    .memory-card-box {
+      background-color: var(--env-base);
+      color: #F8FAFC;
+      box-shadow:
+        0 18px 40px -10px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(203, 213, 225, 0.35);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    }
+
+    .memory-card-box:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow:
+        0 26px 50px -10px rgba(0, 0, 0, 0.78),
+        0 0 0 1.5px var(--foil-light);
+    }
+
+    /* Front Left/Right/Bottom Pocket of Envelope */
+    .envelope-pocket {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      border-radius: 12px;
+      overflow: hidden;
+      filter: drop-shadow(0 -4px 10px rgba(0, 0, 0, 0.25));
+    }
+
+    /* Top Hinged Flap */
+    .envelope-flap-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 62%;
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      transition:
+        transform 0.95s cubic-bezier(0.34, 1.25, 0.64, 1),
+        z-index 0.1s linear 0.35s;
+      z-index: 30;
+    }
+
+    .envelope-assembly.is-open .envelope-flap-wrapper {
+      transform: rotateX(180deg);
+      z-index: 5;
+      transition:
+        transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+        z-index 0.1s linear 0.35s;
+    }
+
+    .flap-front, .flap-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .flap-back {
+      transform: rotateX(180deg);
+    }
+
+    /* Wax Seal Styling */
+    .wax-seal-btn {
+      position: absolute;
+      left: 50%;
+      top: 56%;
+      transform: translate(-50%, -50%) translateZ(35px);
+      width: clamp(68px, 14vw, 82px);
+      height: clamp(68px, 14vw, 82px);
+      border-radius: 9999px;
+      z-index: 40;
+      transition:
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.45s ease;
+      cursor: pointer;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.65));
+    }
+
+    .wax-seal-btn:hover {
+      transform: translate(-50%, -52%) translateZ(40px) scale(1.07);
+    }
+
+    .envelope-assembly.is-open .wax-seal-btn {
+      opacity: 0;
+      transform: translate(-50%, -80%) translateZ(10px) scale(0.75);
+      pointer-events: none;
+    }
+
+    /* Ambient floating dust motes */
+    #ambient-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Print Styles so user can cleanly print the card */
+    @media print {
+      body {
+        background: #ffffff !important;
+      }
+      header, footer, #controls-bar, #ambient-canvas, .envelope-back, .envelope-pocket, .envelope-flap-wrapper, .wax-seal-btn, #hint-pill {
+        display: none !important;
+      }
+      .stage-perspective {
+        perspective: none !important;
+      }
+      .envelope-assembly {
+        transform: none !important;
+        width: 100% !important;
+        max-width: 650px !important;
+        margin: 0 auto !important;
+      }
+      .invitation-card {
+        position: relative !important;
+        transform: none !important;
+        height: auto !important;
+        box-shadow: none !important;
+        border: 2px solid #94A3B8 !important;
+      }
+    }
+  </style>
+    <!-- Header Controls: YouTube Music & Sound Toggle -->
+    <div class="flex items-center gap-2 bg-slate-900/65 backdrop-blur-md p-1.5 rounded-full border border-slate-300/15 shadow-lg">
+      <!-- Music Play / Pause Pill -->
+      <button id="music-toggle-btn" onclick="toggleYoutubeMusic()" title="Play / Pause Background Song" aria-label="Play or Pause Background Song" class="px-3 py-1.5 rounded-full text-slate-200 hover:bg-slate-200/10 transition-colors flex items-center gap-2 min-h-[36px] text-xs">
+        <span id="music-bars" class="flex items-end gap-[2px] h-3 w-3 justify-center">
+          <span class="w-[2px] h-1.5 bg-slate-300 rounded-full transition-all"></span>
+          <span class="w-[2px] h-3 bg-slate-300 rounded-full transition-all"></span>
+          <span class="w-[2px] h-2 bg-slate-300 rounded-full transition-all"></span>
+        </span>
+        <span id="music-btn-label" class="hidden sm:inline font-medium tracking-wide">Play Song</span>
+      </button>
+
+      <div class="w-[1px] h-4 bg-slate-300/15"></div>
+
+      <!-- Sound Toggle Button -->
+      <button id="sound-toggle" onclick="toggleSound()" title="Toggle Paper Rustle & Wax Sound" aria-label="Toggle Sound" class="p-2 rounded-full text-slate-200 hover:bg-slate-200/10 transition-colors flex items-center justify-center min-w-[36px] min-h-[36px]">
+        <svg id="sound-icon-on" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+        <svg id="sound-icon-off" class="w-4 h-4 hidden text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <line x1="23" y1="9" x2="17" y2="15" />
+          <line x1="17" y1="9" x2="23" y2="15" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hidden YouTube IFrame API Container -->
+  <div class="fixed -left-[9999px] -top-[9999px] w-1 h-1 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div id="yt-player"></div>
+  </div>
+
+  <!-- Main Interactive Stage -->
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-3 sm:px-6 py-8 sm:py-12">
+
+    <!-- Status / Instruction Pill -->
+    <div id="hint-pill" class="mb-7 sm:mb-9 px-4 py-1.5 rounded-full bg-slate-900/70 backdrop-blur-md border border-slate-300/15 text-xs sm:text-sm text-slate-200/90 tracking-wide flex items-center gap-2 transition-all duration-500 text-center">
+      <span class="w-2 h-2 rounded-full bg-slate-300 animate-pulse shrink-0"></span>
+      <span id="hint-text">Tap the silver wax seal or envelope to unfold</span>
+    </div>
+
+    <!-- 3D Envelope Assembly -->
+    <div class="stage-perspective flex items-center justify-center w-full my-auto">
+      <div id="envelope" class="envelope-assembly" onclick="handleEnvelopeClick(event)" role="button" tabindex="0" aria-label="Interactive carved envelope">
+
+        <!-- 1. Back Panel & Intricate Laser-Cut Interior Liner -->
+        <div class="envelope-back">
+          <div class="envelope-liner">
+            <!-- Carved Damask / Mandala SVG Pattern Inside Envelope -->
+            <svg class="w-full h-full opacity-35" viewBox="0 0 540 365" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <pattern id="carved-lace" x="0" y="0" width="90" height="90" patternUnits="userSpaceOnUse">
+                  <circle cx="45" cy="45" r="38" fill="none" stroke="var(--foil-primary)" stroke-width="0.9" stroke-dasharray="3 2" />
+                  <circle cx="45" cy="45" r="24" fill="none" stroke="var(--foil-primary)" stroke-width="1.1" />
+                  <path d="M45 7 C52 24, 66 38, 83 45 C66 52, 52 66, 45 83 C38 66, 24 52, 7 45 C24 38, 38 24, 45 7 Z" fill="none" stroke="var(--foil-primary)" stroke-width="1" />
+                  <circle cx="45" cy="45" r="5" fill="var(--foil-primary)" opacity="0.6" />
+                  <circle cx="0" cy="0" r="14" fill="none" stroke="var(--foil-primary)" stroke-width="0.8" />
+                  <circle cx="90" cy="0" r="14" fill="none" stroke="var(--foil-primary)" stroke-width="0.8" />
+                  <circle cx="0" cy="90" r="14" fill="none" stroke="var(--foil-primary)" stroke-width="0.8" />
+                  <circle cx="90" cy="90" r="14" fill="none" stroke="var(--foil-primary)" stroke-width="0.8" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#carved-lace)" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- 2. The Carved Invitation / Letter Card Inside -->
+        <article id="invitation-card" class="invitation-card p-4 sm:p-7 select-text" onclick="event.stopPropagation()">
+          <!-- Intricate Carved / Die-Cut Filigree Frame SVG -->
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 500 420" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="card-foil-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--foil-dark)" />
+                <stop offset="35%" stop-color="var(--foil-primary)" />
+                <stop offset="55%" stop-color="var(--foil-light)" />
+                <stop offset="100%" stop-color="var(--foil-dark)" />
+              </linearGradient>
+              <filter id="emboss-shadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-color="#000000" flood-opacity="0.22" />
+              </filter>
+            </defs>
+
+            <!-- Outer Laser-Cut Scalloped & Filigree Frame -->
+            <rect x="10" y="10" width="480" height="400" rx="10" fill="none" stroke="url(#card-foil-grad)" stroke-width="2.2" filter="url(#emboss-shadow)" />
+            <rect x="17" y="17" width="466" height="386" rx="7" fill="none" stroke="url(#card-foil-grad)" stroke-width="0.8" stroke-dasharray="4 3" />
+
+            <!-- Top-Left Carved Corner Arabesque -->
+            <g transform="translate(16, 16)" stroke="url(#card-foil-grad)" fill="none" stroke-width="1.4" filter="url(#emboss-shadow)">
+              <path d="M0,48 C0,18 18,0 48,0" />
+              <path d="M6,38 C6,16 16,6 38,6" />
+              <circle cx="14" cy="14" r="4" fill="url(#card-foil-grad)" />
+              <path d="M18,6 C26,6 30,14 22,22 C14,30 6,26 6,18" />
+            </g>
+
+            <!-- Top-Right Carved Corner Arabesque -->
+            <g transform="translate(484, 16) scale(-1, 1)" stroke="url(#card-foil-grad)" fill="none" stroke-width="1.4" filter="url(#emboss-shadow)">
+              <path d="M0,48 C0,18 18,0 48,0" />
+              <path d="M6,38 C6,16 16,6 38,6" />
+              <circle cx="14" cy="14" r="4" fill="url(#card-foil-grad)" />
+              <path d="M18,6 C26,6 30,14 22,22 C14,30 6,26 6,18" />
+            </g>
+
+            <!-- Bottom-Left Carved Corner Arabesque -->
+            <g transform="translate(16, 404) scale(1, -1)" stroke="url(#card-foil-grad)" fill="none" stroke-width="1.4" filter="url(#emboss-shadow)">
+              <path d="M0,48 C0,18 18,0 48,0" />
+              <path d="M6,38 C6,16 16,6 38,6" />
+              <circle cx="14" cy="14" r="4" fill="url(#card-foil-grad)" />
+              <path d="M18,6 C26,6 30,14 22,22 C14,30 6,26 6,18" />
+            </g>
+
+            <!-- Bottom-Right Carved Corner Arabesque -->
+            <g transform="translate(484, 404) scale(-1, -1)" stroke="url(#card-foil-grad)" fill="none" stroke-width="1.4" filter="url(#emboss-shadow)">
+              <path d="M0,48 C0,18 18,0 48,0" />
+              <path d="M6,38 C6,16 16,6 38,6" />
+              <circle cx="14" cy="14" r="4" fill="url(#card-foil-grad)" />
+              <path d="M18,6 C26,6 30,14 22,22 C14,30 6,26 6,18" />
+            </g>
+
+            <!-- Top Center Laser-Cut Crown Medallion -->
+            <g transform="translate(250, 26)" stroke="url(#card-foil-grad)" fill="none" stroke-width="1.2">
+              <path d="M-45,0 C-25,-12 -10,-12 0,0 C10,-12 25,-12 45,0" />
+              <circle cx="0" cy="-6" r="3" fill="url(#card-foil-grad)" />
+            </g>
+          </svg>
+
+          <!-- Card Header Content -->
+          <div class="relative z-10 text-center pt-1 sm:pt-2 shrink-0">
+            <p id="card-eyebrow" class="font-serif-display text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-slate-500">
+              Happy 1st Monthsary
+            </p>
+            <h2 id="card-title" class="font-script mt-0.5 leading-tight text-slate-800" style="font-size: clamp(1.65rem, 4.5vw, 2.5rem);">
+              Hi, mahal! ❤️
+            </h2>
+            <div class="w-20 h-[1px] mx-auto my-1.5 bg-slate-400/60"></div>
+          </div>
+
+          <!-- Card Body Message -->
+          <div class="relative z-10 text-center px-2.5 sm:px-6 my-auto overflow-y-auto letter-scroll max-h-[68%]">
+            <div id="card-body" class="font-serif-editorial leading-relaxed italic text-slate-800 space-y-2.5" style="font-size: clamp(0.84rem, 2.3vw, 1.02rem);">
+              <p>It's been a long day, but I'm still happy and grateful to have you by my side. I hope that no matter what challenges or problems we may face in the future, we will always stay strong, support each other, and overcome everything together. I want us to keep growing stronger as a couple and never give up on each other.</p>
+              <p>I will always love you, mahal. Happy 1st monthsary! Here's to more months, memories, and beautiful moments together. I love you so much! ❤️</p>
+            </div>
+            <div class="mt-2.5 sm:mt-3 space-y-0.5 font-serif-display text-[9px] sm:text-[11px] tracking-[0.18em] uppercase text-slate-500">
+              <p id="card-date">Chapter One • 1st Monthsary</p>
+              <p id="card-venue" class="opacity-85">Forever &amp; Always Together</p>
+            </div>
+          </div>
+
+          <!-- Card Footer Signature -->
+          <div class="relative z-10 text-center pt-1 pb-0.5 sm:pb-1 shrink-0">
+            <p id="card-signature" class="font-script text-slate-700" style="font-size: clamp(1.2rem, 3.2vw, 1.65rem);">
+              Forever yours, with all my heart ❤️
+            </p>
+          </div>
+        </article>
+
+        <!-- 3. Front Envelope Pocket with Intricate Carved / Embossed Paper-Cut Relief -->
+        <div class="envelope-pocket">
+          <svg class="w-full h-full" viewBox="0 0 540 365" preserveAspectRatio="none">
+            <defs>
+              <!-- Carved Paper Cutout Clip Path for Center Lace Medallion -->
+              <linearGradient id="pocket-grad-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--env-base)" />
+                <stop offset="100%" stop-color="var(--env-shade)" />
+              </linearGradient>
+              <linearGradient id="pocket-grad-right" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="var(--env-base)" />
+                <stop offset="100%" stop-color="var(--env-shade)" />
+              </linearGradient>
+              <linearGradient id="pocket-grad-bottom" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="var(--env-base)" />
+                <stop offset="85%" stop-color="var(--env-shade)" />
+                <stop offset="100%" stop-color="var(--env-dark)" />
+              </linearGradient>
+              <linearGradient id="foil-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--foil-dark)" />
+                <stop offset="30%" stop-color="var(--foil-primary)" />
+                <stop offset="50%" stop-color="var(--foil-light)" />
+                <stop offset="75%" stop-color="var(--foil-primary)" />
+                <stop offset="100%" stop-color="var(--foil-dark)" />
+              </linearGradient>
+              <filter id="paper-cut-depth" x="-15%" y="-15%" width="130%" height="130%">
+                <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.38" />
+                <feDropShadow dx="0" dy="-1" stdDeviation="1" flood-color="#ffffff" flood-opacity="0.25" />
+              </filter>
+            </defs>
+
+            <!-- Left Wing Flap -->
+            <polygon points="0,0 285,195 0,365" fill="url(#pocket-grad-left)" />
+            <polyline points="0,4 278,195 0,361" fill="none" stroke="url(#foil-stroke)" stroke-width="1.2" opacity="0.65" />
+
+            <!-- Right Wing Flap -->
+            <polygon points="540,0 255,195 540,365" fill="url(#pocket-grad-right)" />
+            <polyline points="540,4 262,195 540,361" fill="none" stroke="url(#foil-stroke)" stroke-width="1.2" opacity="0.65" />
+
+            <!-- Bottom Envelope Pocket Flap with Carved Edge -->
+            <path d="M0,365 L245,178 Q270,160 295,178 L540,365 Z" fill="url(#pocket-grad-bottom)" filter="url(#paper-cut-depth)" />
+
+            <!-- Gold Foil Embossed Trim along Bottom Pocket -->
+            <path d="M12,365 L248,185 Q270,169 292,185 L528,365" fill="none" stroke="url(#foil-stroke)" stroke-width="1.8" />
+            <path d="M26,365 L252,193 Q270,180 288,193 L514,365" fill="none" stroke="url(#foil-stroke)" stroke-width="0.9" stroke-dasharray="4 3" />
+
+            <!-- Intricate Carved / Embossed Botanical & Filigree Relief on Pocket -->
+            <g transform="translate(270, 285)" filter="url(#paper-cut-depth)">
+              <!-- Central Carved Rose/Mandala Relief -->
+              <circle cx="0" cy="0" r="44" fill="var(--env-shade)" stroke="url(#foil-stroke)" stroke-width="1.6" />
+              <circle cx="0" cy="0" r="34" fill="none" stroke="url(#foil-stroke)" stroke-width="1" stroke-dasharray="3 2" />
+              <path d="M0,-32 C10,-16 16,-10 32,0 C16,10 10,16 0,32 C-10,16 -16,10 -32,0 C-16,-10 -10,-16 0,-32 Z" fill="var(--env-base)" stroke="url(#foil-stroke)" stroke-width="1.4" />
+              <path d="M-22,-22 C-8,-14 8,-14 22,-22 C14,-8 14,8 22,22 C8,14 -8,14 -22,22 C-14,8 -14,-8 -22,-22 Z" fill="none" stroke="url(#foil-stroke)" stroke-width="1.1" />
+              <circle cx="0" cy="0" r="7" fill="url(#foil-stroke)" />
+
+              <!-- Left Flowing Carved Vine & Leaves -->
+              <path d="M-48,8 C-85,2 -115,24 -155,34" fill="none" stroke="url(#foil-stroke)" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M-75,6 C-85,-10 -102,-8 -105,6 C-92,12 -82,12 -75,6 Z" fill="var(--env-base)" stroke="url(#foil-stroke)" stroke-width="1.2" />
+              <path d="M-112,20 C-122,6 -138,10 -140,24 C-128,28 -118,26 -112,20 Z" fill="var(--env-base)" stroke="url(#foil-stroke)" stroke-width="1.2" />
+              <path d="M-92,14 C-98,28 -114,32 -122,22" fill="none" stroke="url(#foil-stroke)" stroke-width="1.2" />
+
+              <!-- Right Flowing Carved Vine & Leaves -->
+              <path d="M48,8 C85,2 115,24 155,34" fill="none" stroke="url(#foil-stroke)" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M75,6 C85,-10 102,-8 105,6 C92,12 82,12 75,6 Z" fill="var(--env-base)" stroke="url(#foil-stroke)" stroke-width="1.2" />
+              <path d="M112,20 C122,6 138,10 140,24 C128,28 118,26 112,20 Z" fill="var(--env-base)" stroke="url(#foil-stroke)" stroke-width="1.2" />
+              <path d="M92,14 C98,28 114,32 122,22" fill="none" stroke="url(#foil-stroke)" stroke-width="1.2" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- 4. Top Hinged Flap with Laser-Cut Scalloped Lace Border -->
+        <div class="envelope-flap-wrapper">
+          <!-- Front of Flap (Visible when closed) -->
+          <div class="flap-front">
+            <svg class="w-full h-full overflow-visible" viewBox="0 0 540 226" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="top-flap-grad" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="var(--env-base)" />
+                  <stop offset="70%" stop-color="var(--env-shade)" />
+                  <stop offset="100%" stop-color="var(--env-dark)" />
+                </linearGradient>
+                <filter id="flap-shadow" x="-10%" y="-10%" width="120%" height="130%">
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.45" />
+                </filter>
+              </defs>
+
+              <!-- Main Triangular Flap with Rounded Point -->
+              <path d="M0,0 L540,0 L292,204 Q270,222 248,204 Z" fill="url(#top-flap-grad)" filter="url(#flap-shadow)" />
+
+              <!-- Outer Foil Border -->
+              <path d="M10,2 L530,2 L289,197 Q270,213 251,197 Z" fill="none" stroke="url(#foil-stroke)" stroke-width="2" />
+
+              <!-- Carved Lace Cutout Filigree Inside Top Flap -->
+              <g filter="url(#paper-cut-depth)">
+                <path d="M40,14 L500,14 L285,184 Q270,196 255,184 Z" fill="none" stroke="url(#foil-stroke)" stroke-width="1.1" stroke-dasharray="5 3" />
+
+                <!-- Ornate Carved Crest on Flap -->
+                <g transform="translate(270, 86)">
+                  <path d="M-95,-42 C-55,-20 -35,-45 0,-22 C35,-45 55,-20 95,-42" fill="none" stroke="url(#foil-stroke)" stroke-width="1.5" />
+                  <path d="M-65,-15 C-35,5 -20,-15 0,8 C20,-15 35,5 65,-15" fill="none" stroke="url(#foil-stroke)" stroke-width="1.3" />
+                  <circle cx="-48" cy="-28" r="4" fill="var(--env-dark)" stroke="url(#foil-stroke)" stroke-width="1.2" />
+                  <circle cx="48" cy="-28" r="4" fill="var(--env-dark)" stroke="url(#foil-stroke)" stroke-width="1.2" />
+                  <circle cx="0" cy="-32" r="5.5" fill="var(--env-dark)" stroke="url(#foil-stroke)" stroke-width="1.4" />
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Back of Flap (Visible once rotated 180deg open) -->
+          <div class="flap-back">
+            <svg class="w-full h-full" viewBox="0 0 540 226" preserveAspectRatio="none">
+              <path d="M0,0 L540,0 L292,204 Q270,222 248,204 Z" fill="var(--env-shade)" />
+              <path d="M16,4 L524,4 L288,194 Q270,209 252,194 Z" fill="none" stroke="url(#foil-stroke)" stroke-width="1.2" opacity="0.6" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- 5. Realistic Embossed 3D Wax Seal -->
+        <button id="wax-seal" type="button" onclick="openEnvelope(event)" aria-label="Break wax seal and open envelope" class="wax-seal-btn group focus:outline-none">
+          <svg class="w-full h-full" viewBox="0 0 100 100">
+            <defs>
+              <radialGradient id="wax-body" cx="38%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="var(--wax-highlight)" />
+                <stop offset="55%" stop-color="var(--wax-color)" />
+                <stop offset="100%" stop-color="var(--wax-shadow)" />
+              </radialGradient>
+              <filter id="wax-bevel" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.55" />
+              </filter>
+            </defs>
+
+            <!-- Organic Melted Wax Rim -->
+            <path d="M50,4 C63,3 76,9 85,18 C94,28 98,41 96,54 C94,68 87,81 75,89 C63,96 48,98 34,94 C20,90 9,79 5,65 C1,51 4,35 13,23 C22,11 36,5 50,4 Z" fill="url(#wax-body)" />
+
+            <!-- Inner Stamped Rim -->
+            <circle cx="50" cy="50" r="35" fill="none" stroke="var(--wax-shadow)" stroke-width="3" opacity="0.65" />
+            <circle cx="50" cy="50" r="33" fill="none" stroke="var(--wax-highlight)" stroke-width="1.2" opacity="0.7" />
+
+            <!-- Stamped Monogram & Botanical Wreath -->
+            <g filter="url(#wax-bevel)" fill="none" stroke="var(--foil-light)" stroke-linecap="round">
+              <path d="M30,64 C22,54 22,40 31,30" stroke-width="1.3" opacity="0.85" />
+              <path d="M70,64 C78,54 78,40 69,30" stroke-width="1.3" opacity="0.85" />
+              <path d="M50,62 C50,62 34,51 34,41 C34,35 39,31 44,31 C47,31 49,33 50,35 C51,33 53,31 56,31 C61,31 66,35 66,41 C66,51 50,62 50,62 Z" fill="var(--foil-light)" stroke="none" opacity="0.92" />
+            </g>
+          </svg>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Carved Memory Photo Card Boxes (Revealed when envelope opens) -->
+    <section id="memories-gallery" aria-label="Our Memories" class="memories-gallery w-full max-w-4xl mx-auto px-2 sm:px-4 z-20">
+      <div class="text-center mb-5">
+        <span class="text-[10px] uppercase tracking-[0.3em] text-slate-400 block">Sterling Silver Keepsake Frames</span>
+        <h3 class="font-serif-display text-base sm:text-lg text-slate-100 tracking-wider mt-0.5">Our Memories</h3>
+        <p class="text-xs text-slate-400 mt-1">Tap or drag &amp; drop a photo onto any silver frame to add your favorite moments</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Memory Frame 1 -->
+        <div class="memory-card-box relative rounded-xl p-3.5 pb-4 flex flex-col items-center group"
+             ondragover="handleDragOver(event)" ondrop="handleDrop(event, 0)">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 240 280" preserveAspectRatio="none">
+            <rect x="6" y="6" width="228" height="268" rx="8" fill="none" stroke="var(--foil-primary)" stroke-width="1.2" opacity="0.6" />
+            <path d="M12,32 C12,18 18,12 32,12 M228,32 C228,18 222,12 208,12 M12,248 C12,262 18,268 32,268 M228,248 C228,262 222,268 208,268" fill="none" stroke="var(--foil-light)" stroke-width="1.5" />
+          </svg>
+
+          <input type="file" id="photo-input-0" accept="image/*" class="hidden" onchange="handlePhotoUpload(event, 0)" />
+
+          <div onclick="triggerPhotoInput(0)" role="button" tabindex="0" aria-label="Upload Memory Photo 1"
+               class="relative w-full aspect-[4/3] rounded-lg overflow-hidden cursor-pointer border border-slate-300/25 bg-slate-950/60 flex items-center justify-center min-h-[160px]">
+            <img id="memory-img-0" src="assets/img/1.jpg" alt="Day One"
+                 onload="handleDefaultImageLoad(0)" onerror="handleDefaultImageError(0)"
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+
+            <div id="memory-placeholder-0" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-slate-800/50 via-slate-900/70 to-slate-950/80">
+              <svg class="w-9 h-9 mb-2 text-slate-300/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="8.5" cy="10.5" r="1.5" />
+                <path d="M21 15l-5-5L5 19" />
+              </svg>
+              <span class="font-serif-display text-[11px] uppercase tracking-widest text-slate-200">Add Photo 01</span>
+              <span class="font-serif-editorial italic text-xs text-slate-400 mt-0.5">Tap or drop image</span>
+            </div>
+
+            <div class="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3.5 py-1.5 rounded-full bg-slate-900/90 text-slate-100 text-xs font-medium border border-slate-300/40">
+                Replace Photo
+              </span>
+            </div>
+          </div>
+
+          <input id="memory-caption-0" type="text" value="Day One ✨" maxlength="42"
+                 aria-label="Memory 1 Caption"
+                 class="relative z-10 mt-3 w-full text-center bg-transparent font-script text-2xl text-slate-200 focus:outline-none focus:underline decoration-slate-300/60 min-h-[36px]" />
+        </div>
+
+        <!-- Memory Frame 2 -->
+        <div class="memory-card-box relative rounded-xl p-3.5 pb-4 flex flex-col items-center group"
+             ondragover="handleDragOver(event)" ondrop="handleDrop(event, 1)">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 240 280" preserveAspectRatio="none">
+            <rect x="6" y="6" width="228" height="268" rx="8" fill="none" stroke="var(--foil-primary)" stroke-width="1.2" opacity="0.6" />
+            <path d="M12,32 C12,18 18,12 32,12 M228,32 C228,18 222,12 208,12 M12,248 C12,262 18,268 32,268 M228,248 C228,262 222,268 208,268" fill="none" stroke="var(--foil-light)" stroke-width="1.5" />
+          </svg>
+
+          <input type="file" id="photo-input-1" accept="image/*" class="hidden" onchange="handlePhotoUpload(event, 1)" />
+
+          <div onclick="triggerPhotoInput(1)" role="button" tabindex="0" aria-label="Upload Memory Photo 2"
+               class="relative w-full aspect-[4/3] rounded-lg overflow-hidden cursor-pointer border border-slate-300/25 bg-slate-950/60 flex items-center justify-center min-h-[160px]">
+            <img id="memory-img-1" src="assets/img/2.jpg" alt="Favorite Moment"
+                 onload="handleDefaultImageLoad(1)" onerror="handleDefaultImageError(1)"
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+
+            <div id="memory-placeholder-1" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-slate-800/50 via-slate-900/70 to-slate-950/80">
+              <svg class="w-9 h-9 mb-2 text-slate-300/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+              <span class="font-serif-display text-[11px] uppercase tracking-widest text-slate-200">Add Photo 02</span>
+              <span class="font-serif-editorial italic text-xs text-slate-400 mt-0.5">Tap or drop image</span>
+            </div>
+
+            <div class="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3.5 py-1.5 rounded-full bg-slate-900/90 text-slate-100 text-xs font-medium border border-slate-300/40">
+                Replace Photo
+              </span>
+            </div>
+          </div>
+
+          <input id="memory-caption-1" type="text" value="Favorite Moment ❤️" maxlength="42"
+                 aria-label="Memory 2 Caption"
+                 class="relative z-10 mt-3 w-full text-center bg-transparent font-script text-2xl text-slate-200 focus:outline-none focus:underline decoration-slate-300/60 min-h-[36px]" />
+        </div>
+
+        <!-- Memory Frame 3 -->
+        <div class="memory-card-box relative rounded-xl p-3.5 pb-4 flex flex-col items-center group"
+             ondragover="handleDragOver(event)" ondrop="handleDrop(event, 2)">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 240 280" preserveAspectRatio="none">
+            <rect x="6" y="6" width="228" height="268" rx="8" fill="none" stroke="var(--foil-primary)" stroke-width="1.2" opacity="0.6" />
+            <path d="M12,32 C12,18 18,12 32,12 M228,32 C228,18 222,12 208,12 M12,248 C12,262 18,268 32,268 M228,248 C228,262 222,268 208,268" fill="none" stroke="var(--foil-light)" stroke-width="1.5" />
+          </svg>
+
+          <input type="file" id="photo-input-2" accept="image/*" class="hidden" onchange="handlePhotoUpload(event, 2)" />
+
+          <div onclick="triggerPhotoInput(2)" role="button" tabindex="0" aria-label="Upload Memory Photo 3"
+               class="relative w-full aspect-[4/3] rounded-lg overflow-hidden cursor-pointer border border-slate-300/25 bg-slate-950/60 flex items-center justify-center min-h-[160px]">
+            <img id="memory-img-2" src="assets/img/3.jpg" alt="1st Monthsary"
+                 onload="handleDefaultImageLoad(2)" onerror="handleDefaultImageError(2)"
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+
+            <div id="memory-placeholder-2" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-slate-800/50 via-slate-900/70 to-slate-950/80">
+              <svg class="w-9 h-9 mb-2 text-slate-300/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                <path d="M12 2L14.8 8.5L22 9.3L16.5 14L18.2 21L12 17.3L5.8 21L7.5 14L2 9.3L9.2 8.5L12 2Z" />
+              </svg>
+              <span class="font-serif-display text-[11px] uppercase tracking-widest text-slate-200">Add Photo 03</span>
+              <span class="font-serif-editorial italic text-xs text-slate-400 mt-0.5">Tap or drop image</span>
+            </div>
+
+            <div class="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="px-3.5 py-1.5 rounded-full bg-slate-900/90 text-slate-100 text-xs font-medium border border-slate-300/40">
+                Replace Photo
+              </span>
+            </div>
+          </div>
+
+          <input id="memory-caption-2" type="text" value="1st Monthsary" maxlength="42"
+                 aria-label="Memory 3 Caption"
+                 class="relative z-10 mt-3 w-full text-center bg-transparent font-script text-2xl text-slate-200 focus:outline-none focus:underline decoration-slate-300/60 min-h-[36px]" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Toolbar Below Envelope -->
+    <div id="controls-bar" class="mt-9 sm:mt-12 z-20 flex flex-wrap items-center justify-center gap-3">
+      <button id="btn-toggle-open" onclick="toggleEnvelope()" class="px-6 py-3 rounded-full foil-shimmer text-slate-950 font-semibold text-xs sm:text-sm tracking-wide shadow-xl hover:scale-105 active:scale-95 transition-transform flex items-center gap-2 min-h-[44px]">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 12V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-6z" />
+          <polyline points="22,6 12,13 2,6" />
+        </svg>
+        <span id="btn-toggle-label">Open Envelope</span>
+      </button>
+
+      <button onclick="shareInvitation()" class="px-5 py-3 rounded-full bg-slate-900/75 hover:bg-slate-800/80 backdrop-blur-md border border-slate-300/20 text-slate-100 text-xs sm:text-sm font-medium transition-all flex items-center gap-2 min-h-[44px]">
+        <svg class="w-4 h-4 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+        </svg>
+        <span>Copy Link</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- Subtle Footer -->
+  <footer class="relative z-10 text-center py-4 px-4 text-[11px] text-slate-400/75 tracking-wider">
+    Midnight &amp; Silver Carved Stationery • Tap seal to open
+  </footer>
+
+  <!-- Toast Notification Banner (Replaces alert()) -->
+  <div id="toast-banner" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full bg-slate-900/95 border border-slate-300/40 text-slate-100 text-xs sm:text-sm shadow-2xl opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
+    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+    <span id="toast-message">Notification</span>
+  </div>
+
+  <script>
+    // =========================================================================
+    // STATE & DEFAULT STATIONERY CONTENT
+    // =========================================================================
+    let isEnvelopeOpen = false;
+    let soundEnabled = true;
+
+    function getPlainCardBody() {
+      const paragraphs = Array.from(document.querySelectorAll("#card-body p"));
+      if (paragraphs.length > 0) {
+        return paragraphs.map((p) => p.textContent.trim()).join("\n\n");
+      }
+      return document.getElementById("card-body").textContent.trim();
+    }
+
+    function renderCardBody(text) {
+      const container = document.getElementById("card-body");
+      container.innerHTML = "";
+      const blocks = text.split(/\n\s*\n/).filter((b) => b.trim().length > 0);
+      blocks.forEach((block) => {
+        const p = document.createElement("p");
+        p.textContent = block.trim();
+        container.appendChild(p);
+      });
+    }
+
+    // =========================================================================
+    // PROCEDURAL PAPER RUSTLE & WAX SEAL SOUND EFFECTS (Native Web Audio API)
+    // =========================================================================
+    let audioCtx = null;
+
+    function playPaperSound(mode = "open") {
+      if (!soundEnabled) return;
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        if (!audioCtx) audioCtx = new AudioContextClass();
+        if (audioCtx.state === "suspended") audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+
+        // 1. Crisp wax seal pop when opening
+        if (mode === "open") {
+          const osc = audioCtx.createOscillator();
+          const oscGain = audioCtx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(190, now);
+          osc.frequency.exponentialRampToValueAtTime(52, now + 0.085);
+
+          oscGain.gain.setValueAtTime(0.22, now);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+          osc.connect(oscGain);
+          oscGain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.095);
+        }
+
+        // 2. Filtered pink-like noise burst simulating heavy textured cotton paper sliding
+        const duration = 0.65;
+        const bufferSize = Math.floor(audioCtx.sampleRate * duration);
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.997 * b0 + white * 0.029;
+          b1 = 0.985 * b1 + white * 0.032;
+          b2 = 0.950 * b2 + white * 0.048;
+          output[i] = (b0 + b1 + b2 + white * 0.18) * 0.5;
+        }
+
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(mode === "open" ? 1350 : 950, now);
+        filter.Q.value = 1.3;
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.001, now);
+        gainNode.gain.linearRampToValueAtTime(0.16, now + 0.14);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        whiteNoise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        whiteNoise.start(now);
+        whiteNoise.stop(now + duration);
+      } catch (err) {
+        // Silently ignore audio restrictions if blocked
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById("sound-icon-on").classList.toggle("hidden", !soundEnabled);
+      document.getElementById("sound-icon-off").classList.toggle("hidden", soundEnabled);
+      showToast(soundEnabled ? "Paper & wax sound effects enabled" : "Sound effects muted");
+    }
+
+    // =========================================================================
+    // YOUTUBE / YOUTUBE MUSIC BACKGROUND PLAYER
+    // =========================================================================
+    const YOUTUBE_VIDEO_ID = "abD4HognTFs";
+    let ytPlayer = null;
+    let isMusicPlaying = false;
+
+    // Load YouTube IFrame Player API
+    (function loadYouTubeAPI() {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    })();
+
+    window.onYouTubeIframeAPIReady = function () {
+      ytPlayer = new YT.Player("yt-player", {
+        height: "1",
+        width: "1",
+        videoId: YOUTUBE_VIDEO_ID,
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          loop: 1,
+          playlist: YOUTUBE_VIDEO_ID,
+          playsinline: 1
+        },
+        events: {
+          onReady: () => {
+            if (isEnvelopeOpen) {
+              playYoutubeMusic();
+            }
+          },
+          onStateChange: (event) => {
+            isMusicPlaying = event.data === YT.PlayerState.PLAYING;
+            updateMusicButtonUI();
+          }
+        }
+      });
+    };
+
+    function updateMusicButtonUI() {
+      const label = document.getElementById("music-btn-label");
+      const bars = document.querySelectorAll("#music-bars span");
+      if (isMusicPlaying) {
+        label.textContent = "Pause Song";
+        bars.forEach((bar) => bar.classList.add("animate-pulse", "bg-slate-100"));
+      } else {
+        label.textContent = "Play Song";
+        bars.forEach((bar) => bar.classList.remove("animate-pulse", "bg-slate-100"));
+      }
+    }
+
+    function playYoutubeMusic() {
+      if (ytPlayer && typeof ytPlayer.playVideo === "function") {
+        ytPlayer.playVideo();
+      }
+    }
+
+    function toggleYoutubeMusic() {
+      if (!ytPlayer || typeof ytPlayer.getPlayerState !== "function") {
+        showToast("Music player is loading...");
+        return;
+      }
+      if (isMusicPlaying) {
+        ytPlayer.pauseVideo();
+        showToast("Music paused");
+      } else {
+        ytPlayer.playVideo();
+        showToast("Playing background song 🎵");
+      }
+    }
+
+    // =========================================================================
+    // ENVELOPE OPEN / CLOSE INTERACTIONS
+    // =========================================================================
+    function handleEnvelopeClick(event) {
+      if (!isEnvelopeOpen) {
+        openEnvelope(event);
+      }
+    }
+
+    function openEnvelope(event) {
+      if (event) event.stopPropagation();
+      if (isEnvelopeOpen) return;
+
+      isEnvelopeOpen = true;
+      const envEl = document.getElementById("envelope");
+      envEl.classList.add("is-open");
+
+      playPaperSound("open");
+      playYoutubeMusic();
+      updateUIState();
+    }
+
+    function closeEnvelope() {
+      if (!isEnvelopeOpen) return;
+
+      isEnvelopeOpen = false;
+      const envEl = document.getElementById("envelope");
+      envEl.classList.remove("is-open");
+
+      playPaperSound("close");
+      updateUIState();
+    }
+
+    function toggleEnvelope() {
+      if (isEnvelopeOpen) {
+        closeEnvelope();
+      } else {
+        openEnvelope();
+      }
+    }
+
+    function updateUIState() {
+      const btnLabel = document.getElementById("btn-toggle-label");
+      const hintText = document.getElementById("hint-text");
+      const gallery = document.getElementById("memories-gallery");
+
+      if (isEnvelopeOpen) {
+        btnLabel.textContent = "Close Envelope";
+        hintText.textContent = "Letter & silver frames unfolded — Tap any photo box below to add your photos";
+        gallery.classList.add("is-visible");
+      } else {
+        btnLabel.textContent = "Open Envelope";
+        hintText.textContent = "Tap the silver wax seal or envelope to unfold";
+        gallery.classList.remove("is-visible");
+      }
+    }
+
+    // =========================================================================
+    // INTERACTIVE MEMORY PHOTO CARD BOXES (UPLOAD & DRAG-AND-DROP)
+    // =========================================================================
+    const DEFAULT_MEMORY_IMAGES = [
+      "assets/img/1.jpg",
+      "assets/img/2.jpg",
+      "assets/img/3.jpg"
+    ];
+
+    function handleDefaultImageLoad(index) {
+      const imgEl = document.getElementById(`memory-img-${index}`);
+      const placeholderEl = document.getElementById(`memory-placeholder-${index}`);
+      if (imgEl && placeholderEl) {
+        imgEl.classList.remove("hidden");
+        placeholderEl.classList.add("hidden");
+      }
+    }
+
+    function handleDefaultImageError(index) {
+      const imgEl = document.getElementById(`memory-img-${index}`);
+      const placeholderEl = document.getElementById(`memory-placeholder-${index}`);
+      if (imgEl && placeholderEl) {
+        imgEl.classList.add("hidden");
+        placeholderEl.classList.remove("hidden");
+      }
+    }
+
+    function triggerPhotoInput(index) {
+      const input = document.getElementById(`photo-input-${index}`);
+      if (input) input.click();
+    }
+
+    function handlePhotoUpload(event, index) {
+      const file = event.target.files && event.target.files[0];
+      if (file) {
+        loadMemoryImageFile(file, index);
+      }
+    }
+
+    function handleDragOver(event) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "copy";
+    }
+
+    function handleDrop(event, index) {
+      event.preventDefault();
+      const file = event.dataTransfer.files && event.dataTransfer.files[0];
+      if (file && file.type.startsWith("image/")) {
+        loadMemoryImageFile(file, index);
+      } else {
+        showToast("Please drop a valid image file");
+      }
+    }
+
+    function loadMemoryImageFile(file, index) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const imgEl = document.getElementById(`memory-img-${index}`);
+        const placeholderEl = document.getElementById(`memory-placeholder-${index}`);
+        if (imgEl && placeholderEl) {
+          imgEl.src = e.target.result;
+          imgEl.classList.remove("hidden");
+          placeholderEl.classList.add("hidden");
+          showToast(`Memory photo 0${index + 1} added to carved frame ❤️`);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Keyboard accessibility (Enter or Space on envelope)
+    document.getElementById("envelope").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleEnvelope();
+      }
+    });
+
+    // =========================================================================
+    // URL SHARING
+    // =========================================================================
+    function syncStateToUrl() {
+      try {
+        const params = new URLSearchParams();
+        params.set("eyebrow", document.getElementById("card-eyebrow").textContent.trim());
+        params.set("title", document.getElementById("card-title").textContent.trim());
+        params.set("body", getPlainCardBody());
+        params.set("date", document.getElementById("card-date").textContent.trim());
+        params.set("venue", document.getElementById("card-venue").textContent.trim());
+        params.set("sig", document.getElementById("card-signature").textContent.trim());
+
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        window.history.replaceState({}, "", newUrl);
+      } catch (e) {
+        // Ignore history API restrictions in sandboxed frames
+      }
+    }
+
+    function hydrateFromUrl() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("eyebrow")) document.getElementById("card-eyebrow").textContent = params.get("eyebrow");
+        if (params.has("title")) document.getElementById("card-title").textContent = params.get("title");
+        if (params.has("body")) renderCardBody(params.get("body"));
+        if (params.has("date")) document.getElementById("card-date").textContent = params.get("date");
+        if (params.has("venue")) document.getElementById("card-venue").textContent = params.get("venue");
+        if (params.has("sig")) document.getElementById("card-signature").textContent = params.get("sig");
+      } catch (e) {
+        // Ignore URL parsing issues
+      }
+    }
+
+    function shareInvitation() {
+      syncStateToUrl();
+      const urlToCopy = window.location.href;
+
+      // Use fallback textarea + execCommand('copy') for reliable iFrame clipboard support
+      const tempInput = document.createElement("textarea");
+      tempInput.value = urlToCopy;
+      tempInput.style.position = "fixed";
+      tempInput.style.opacity = "0";
+      document.body.appendChild(tempInput);
+      tempInput.select();
+
+      try {
+        document.execCommand("copy");
+        showToast("Shareable invitation link copied to clipboard");
+      } catch (err) {
+        showToast("Unable to copy link automatically");
+      } finally {
+        document.body.removeChild(tempInput);
+      }
+    }
+
+    // =========================================================================
+    // TOAST FEEDBACK HELPER
+    // =========================================================================
+    let toastTimeout;
+    function showToast(message) {
+      const banner = document.getElementById("toast-banner");
+      const msgEl = document.getElementById("toast-message");
+      msgEl.textContent = message;
+
+      banner.classList.remove("opacity-0", "translate-y-2");
+      banner.classList.add("opacity-100", "translate-y-0");
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        banner.classList.add("opacity-0", "translate-y-2");
+        banner.classList.remove("opacity-100", "translate-y-0");
+      }, 2800);
+    }
+
+    // =========================================================================
+    // AMBIENT FLOATING GILDED PARTICLES CANVAS
+    // =========================================================================
+    function initAmbientParticles() {
+      const canvas = document.getElementById("ambient-canvas");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      const particleCount = Math.min(55, Math.floor((window.innerWidth * window.innerHeight) / 22000));
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2.1 + 0.6,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: -Math.random() * 0.35 - 0.1,
+          alpha: Math.random() * 0.6 + 0.2,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const computedColor = getComputedStyle(document.body).getPropertyValue("--particle-color").trim() || "rgba(212, 175, 55, 0.35)";
+
+        particles.forEach((p) => {
+          p.x += p.vx + Math.sin(p.phase) * 0.12;
+          p.y += p.vy;
+          p.phase += 0.015;
+
+          if (p.y < -10) {
+            p.y = canvas.height + 10;
+            p.x = Math.random() * canvas.width;
+          }
+          if (p.x < -10) p.x = canvas.width + 10;
+          if (p.x > canvas.width + 10) p.x = -10;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = computedColor;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(animateParticles);
+      }
+
+      animateParticles();
+    }
+
+    // =========================================================================
+    // INITIALIZATION ON WINDOW LOAD
+    // =========================================================================
+    window.addEventListener("DOMContentLoaded", () => {
+      hydrateFromUrl();
+      initAmbientParticles();
+    });
+  </script>
+</body>
+</html>
